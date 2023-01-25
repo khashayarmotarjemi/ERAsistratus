@@ -17,7 +17,7 @@ def getWikiText(keyword):
     page_py = wiki_wiki.page(keyword)
 
     if(page_py.exists()):
-        return page_py.text
+        return page_py.text, page_py.title
     else:
         matches = wikipedia.search(keyword)
         print(matches)
@@ -25,7 +25,7 @@ def getWikiText(keyword):
         print(close_matches)
         if(keyword in close_matches): close_matches.remove(keyword)
         new_page = wiki_wiki.page(close_matches[0])
-        return new_page.text
+        return new_page.text, new_page.title
 
 
 def isBC(words,pair): 

@@ -80,21 +80,23 @@ class MainWindow(QMainWindow):
 
 
     def update_display(self):
-        if(self.finalYaer == ''):
+        if(self.finalYaer == '' or self.word != self.searchbar.text()):
             # pt = wikipedia.page(self.searchbar.text())
             self.word = self.searchbar.text()
-            text = getWikiText(self.word)
+            wiki_page = getWikiText(self.word)
+            text = wiki_page[0] 
+            self.title = wiki_page[1]
             self.text_widget.setText(text[0:300])
             self.finalYaer = yearFinder(text)
             self.result_widget.setText(self.finalYaer)
         else:
-            file1 = open("/home/khashayar/notess/notes/EX/presocratics.md", "a")
-            file1.write(f'| {self.word} | {self.finalYaer} |\n')
-            file1.close()
-            self.searchbar.setText("")
-            self.text_widget.setText("")
-            self.result_widget.setText("")
-            self.finalYaer = ''
+                file1 = open("/home/khashayar/notess/notes/EX/presocratics.md", "a")
+                file1.write(f'| {self.title} | {self.finalYaer} |\n')
+                file1.close()
+                self.searchbar.setText("")
+                self.text_widget.setText("")
+                self.result_widget.setText("")
+                self.finalYaer = ''
 
 
 app = QApplication(sys.argv)
