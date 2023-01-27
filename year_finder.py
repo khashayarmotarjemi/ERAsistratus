@@ -28,11 +28,10 @@ def getWikiText(keyword):
         return new_page.text, new_page.title
 
 
-def isBC(words,pair): 
-    nIndex = words.index(pair[0])
+def isBC(words,num): 
+    nIndex = words.index(num)
     next_words = words[nIndex:nIndex+8]
     lower_words = [x.lower() for x in next_words]
-    # print(lower_words)
     return any(x in lower_words for x in ['bc', 'b.c.', 'bce', 'b.c.e.', 'b.c'])
         
 
@@ -60,21 +59,38 @@ def yearFinder(text):
 
     numbers = re.findall(r'\d+',head)
     # print(numbers)
+    print(numbers)
+
     pairs = [(a, b) for idx, a in enumerate(numbers) for b in numbers[idx + 1:]]
     good_pairs = []
     for p in pairs:
         if(isBirth(p)) :
             good_pairs.append(p)
 
-    first = good_pairs[0]
-    
-    # print(head_tk)
-    
-    min_year = min(int(first[0]),int(first[1]))
-    max_year = max(int(first[0]),int(first[1]))
+    if(not good_pairs):
+        if(not numbers):
+            return "Sorry, couldn't find any numbers in this"
+        else:
+            print("got here")
+            return f'{numbers[0]} {"B.C." if (isBC(head_tk,numbers[0])) else ""}'
+    else:    
+        first = good_pairs[0]
+        
+        # print(head_tk)
+        
+        min_year = min(int(first[0]),int(first[1]))
+        max_year = max(int(first[0]),int(first[1]))
 
-    return f'{min_year}-{max_year} {"B.C." if isBC(head_tk,first) else ""}'
+        return f'{min_year}-{max_year} {"B.C." if (isBC(head_tk,first[0]) or isBC(head_tk,first[1])) else ""}'
 
+
+    # if(not numbers):
+    #     return "Sorry, couldn't find any numbers in this"
+    # elif(len(numbers) == 1):
+    #     print("got here")
+    #     return f'{numbers[0]} {"B.C." if (isBC(head_tk,numbers[0])) else ""}'
+    # else: 
+      
     # isBC(head_tk,first)
 
 def getYearByKeyword(word):
